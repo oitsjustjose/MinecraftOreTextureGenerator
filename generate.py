@@ -20,17 +20,21 @@ def main() -> None:
         os.mkdir("./out")
 
     if not os.path.exists("./base_layers"):
+        os.mkdir("./base_layers")
         print("Base Layers folder not found!")
         print(
             "Please place your Base Layer Textures in a new folder adjacent to this file named `base_layers`"
         )
+        input("Press Enter to Exit")
         sys.exit(0)
+        
     if not os.path.exists("./overlay_layers"):
+        os.mkdir("./overlay_layers")
         print("Overlay Layers folder not found!")
         print(
             "Please place your Overlay Textures in a new folder adjacent to this file named `overlay_layers`"
         )
-
+        input("Press Enter to Exit")
         sys.exit(0)
 
     for base_fn in os.listdir("./base_layers"):
