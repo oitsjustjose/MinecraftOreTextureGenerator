@@ -20,8 +20,4 @@ Once you've gotten all this set up done, run `generate.exe` again - this time yo
 
 I was lazy so here, have a GIF dump of all 252 textures I generated, using each Geolosys Ore Variant as the overlay and [Unearthed's](https://www.curseforge.com/minecraft/mc-mods/unearthed) Stone Variants as bases:
 
-![https://oitsjustjose-sharex.s3.us-east-2.amazonaws.com/2022/06/ezgif-4-a704200a49.gif](https://oitsjustjose-sharex.s3.us-east-2.amazonaws.com/2022/06/ezgif-4-a704200a49.gif =x250)
-
-<!-- <center>
-    <img src="https://oitsjustjose-sharex.s3.us-east-2.amazonaws.com/2022/06/ezgif-4-a704200a49.gif" style="width: 75vw; height: 'auto';  image-rendering: pixelated;">
-<center> -->
+![https://oitsjustjose-sharex.s3.us-east-2.amazonaws.com/2022/06/ezgif-4-a704200a49%281%29.gif](https://oitsjustjose-sharex.s3.us-east-2.amazonaws.com/2022/06/ezgif-4-a704200a49%281%29.gif)
