@@ -16,26 +16,30 @@ def main() -> None:
         python[3] generate.py <PATH_TO_BASE_LAYER>.png
     """
 
-    if not os.path.exists("./out"):
-        os.mkdir("./out")
+    err = False
 
     if not os.path.exists("./base_layers"):
         os.mkdir("./base_layers")
+        err = True
         print("Base Layers folder not found!")
         print(
             "Please place your Base Layer Textures in a new folder adjacent to this file named `base_layers`"
         )
-        input("Press Enter to Exit")
-        sys.exit(0)
-        
+               
     if not os.path.exists("./overlay_layers"):
         os.mkdir("./overlay_layers")
+        err = True
         print("Overlay Layers folder not found!")
         print(
             "Please place your Overlay Textures in a new folder adjacent to this file named `overlay_layers`"
         )
+    
+    if err:
         input("Press Enter to Exit")
         sys.exit(0)
+
+    if not os.path.exists("./out"):
+        os.mkdir("./out")
 
     for base_fn in os.listdir("./base_layers"):
         if not base_fn.endswith(".png"):
