@@ -68,7 +68,7 @@ jobs:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           console.log(process.env)
-          console.log('${{RELEASE_ID}}')
+          console.log('${{env.RELEASE_ID}}')
           const fs = require('fs').promises;
           for (let file of await fs.readdir('./dist')) {
             console.log('uploading', `./dist/${file}`);
@@ -76,7 +76,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: file,
-              release_id: '${{RELEASE_ID}}',
+              release_id: '${{env.RELEASE_ID}}',
               data: await fs.readFile(`./dist/${file}`)
             });            
           }
