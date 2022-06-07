@@ -89,6 +89,7 @@ def headless() -> None:
                 output_dir = arg.split("=")[1]
     except:
         __help()
+
     if not base_dir or not overlay_dir or not output_dir:
         __help()
 
@@ -142,7 +143,7 @@ def gui() -> None:
         event, values = window.read()
         can_start = base_dir and overlay_dir and output_dir
 
-        if event == "Exit" or event == sg.WIN_CLOSED:
+        if event in ["Exit", sg.WIN_CLOSED]:
             break
         if event == "-BASE LAYERS-":
             base_dir = values["-BASE LAYERS-"]
