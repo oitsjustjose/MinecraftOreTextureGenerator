@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Build MOTG Cross-Platform
 
 on:
@@ -35,6 +32,12 @@ jobs:
     - name: Build with PyInstaller
       run: |
         pyinstaller -D -F -n generate -c -n MOTD-${{matrix.os}} ./generate.py
+    - name: Git Tag Generator
+      id: gen_tag
+      uses: ChloePlanet/github-tag-action@2.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
     - name: Create Release
       uses: actions/github-script@v2
       with:
@@ -48,7 +51,7 @@ jobs:
 
           const release = await github.repos.createRelease({
             owner, repo,
-            tag_name: process.env.GITHUB_REF,
+            tag_name: '${{ steps.gen_tag.outputs.new_tag }}',
             prerelease: true,
             target_commitish: sha
           });
@@ -66,23 +69,3 @@ jobs:
             });            
           }
           
-#     - name: Create Release
-#       id: create_release
-#       uses: actions/create-release@v1
-#       env:
-#         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#       with:
-#         tag_name: ${{github.ref}}
-#         release_name: Dev Release ${{github.ref}}
-#         prerelease: true
-#     - name: Upload Release Artifact
-#       id: upload-release-asset
-#       uses: actions/upload-release-asset@v1
-#       env:
-#         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-#       with:
-#         upload_url: ${{steps.create_release.outputs.upload_url}}
-#         asset_path: ./dist/MOTD-${{matrix.os}}.exe
-#         asset_name: MOTD ${{ matrix.os }}
-#         asset_content_type: a[[;ocatopm
-        
