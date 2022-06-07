@@ -57,6 +57,7 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
+          console.log(env)
           const fs = require('fs').promises;
           for (let file of await fs.readdir('./dist')) {
             console.log('uploading', `./dist/${file}`);
