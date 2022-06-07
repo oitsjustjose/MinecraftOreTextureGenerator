@@ -20,7 +20,7 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: ${{ env.GITHUB_SHA }}
+          GITHUB_SHA: ${{ env.GITHUB_RUN_ID }}
         with:
           tag_name: "indev-$GITHUB_SHA"
           release_name: "Prerelease from Commit $GITHUB_SHA"
