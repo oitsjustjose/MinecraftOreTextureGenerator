@@ -21,7 +21,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             console.log(`Creating Tag with context.sha=${context.sha}`)
-            await github.rest.git.createRef({
+            await github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `prerelease-${context.sha}`,
