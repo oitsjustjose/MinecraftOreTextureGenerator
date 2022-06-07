@@ -15,28 +15,22 @@ jobs:
   prebuild:
     runs-on: ubuntu-latest
     steps:
-      - name: Create Release From Commit Hash
-        uses: actions/github-script@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            console.log(`Creating Tag with context.sha=${context.sha}`)
-            await github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `prerelease-${context.sha}`,
-              sha: context.sha
-            });
-            
-            const release = await github.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `prerelease-${context.sha}`,
-              prerelease: true,
-              target_commitish: sha
-            });
-            
-            process.env.release_id=release.data.id
+          tag_name: prerelease-$GITHUB_SHA
+          release_name: Prerelease from Commit $GITHUB_SHA
+          draft: false
+          prerelease: true
+      - name: Store Release ID
+        run: |
+          echo "{release_id}={steps.create_release.outputs.id}" >> $GITHUB_ENV
+
+# context.sha
+
   build:
     needs: [prebuild]
     strategy:
@@ -70,7 +64,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: file,
-              release_id: process.env.release_id,
+              release_id: ${{env.release_id}},
               data: await fs.readFile(`./dist/${file}`)
             });            
           }
