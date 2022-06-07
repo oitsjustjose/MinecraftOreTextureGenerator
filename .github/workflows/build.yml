@@ -21,15 +21,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: prerelease-${{env.GITHUB_SHA}}
-          release_name: Prerelease from Commit ${{env.GITHUB_SHA}}
+          tag_name: indev-$GITHUB_SHA
+          release_name: Prerelease from Commit $GITHUB_SHA
           draft: false
           prerelease: true
       - name: Store Release ID
         run: |
           echo "{release_id}={steps.create_release.outputs.id}" >> $GITHUB_ENV
-
-# context.sha
 
   build:
     needs: [prebuild]
