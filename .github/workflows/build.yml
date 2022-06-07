@@ -21,8 +21,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: prerelease-$GITHUB_SHA
-          release_name: Prerelease from Commit $GITHUB_SHA
+          tag_name: prerelease-${{env.GITHUB_SHA}}
+          release_name: Prerelease from Commit ${{env.GITHUB_SHA}}
           draft: false
           prerelease: true
       - name: Store Release ID
@@ -64,7 +64,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: file,
-              release_id: ${{env.release_id}},
+              release_id: '${{env.release_id}}',
               data: await fs.readFile(`./dist/${file}`)
             });            
           }
