@@ -12,7 +12,33 @@ permissions:
   pull-requests: write
 
 jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release From Commit Hash
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            console.log(`Creating Tag with context.sha=${context.sha}`)
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `prerelease-${context.sha}`,
+              sha: context.sha
+            });
+            
+            const release = await github.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `prerelease-${context.sha}`,
+              prerelease: true,
+              target_commitish: sha
+            });
+            
+            process.env.release_id=release.data.id
   build:
+    needs: [prebuild]
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -32,40 +58,19 @@ jobs:
     - name: Build with PyInstaller
       run: |
         pyinstaller -D -F -n generate -c -n MOTD-${{matrix.os}} ./generate.py
-    - name: Git Tag Generator
-      id: gen_tag
-      uses: ChloePlanet/github-tag-action@2.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
     - name: Create Release
       uses: actions/github-script@v2
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          console.log('environment', process.versions)
           const fs = require('fs').promises;
-      
-          const { repo: { owner, repo }, sha } = context;
-          console.log({ owner, repo, sha });
-
-          const release = await github.repos.createRelease({
-            owner, repo,
-            tag_name: '${{ steps.gen_tag.outputs.new_tag }}',
-            prerelease: true,
-            target_commitish: sha
-          });
-
-          console.log('created release', { release });
-
           for (let file of await fs.readdir('./dist')) {
             console.log('uploading', `./dist/${file}`);
-
             await github.repos.uploadReleaseAsset({
-              owner, repo,
-              release_id: release.data.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               name: file,
+              release_id: process.env.release_id,
               data: await fs.readFile(`./dist/${file}`)
             });            
           }
-          
