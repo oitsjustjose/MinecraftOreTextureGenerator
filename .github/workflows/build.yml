@@ -22,8 +22,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ env.GITHUB_RUN_ID }}
         with:
-          tag_name: "indev-$GITHUB_SHA"
-          release_name: "Prerelease from Commit $GITHUB_SHA"
+          tag_name: indev-${{env.GITHUB_RUN_ID}}
+          release_name: Prerelease from Commit ${{env.GITHUB_RUN_ID}}
           draft: false
           prerelease: true
       - name: Store Release ID
